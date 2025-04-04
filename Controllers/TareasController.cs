@@ -12,7 +12,7 @@ public class TaskController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Home()
     {
         var tasks = await _context.Tareas.ToListAsync();
         return View(tasks);
@@ -30,29 +30,10 @@ public class TaskController : Controller
         {
             _context.Add(task);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Home));
         }
         return View(task);
     }
-
-    public async Task<IActionResult> Delete(Guid? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var task = await _context.Tareas
-            .FirstOrDefaultAsync(m => m.Id == id);
-        
-        if (task == null)
-        {
-            return NotFound();
-        }
-
-        return View(task);
-    }
-
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
@@ -66,7 +47,7 @@ public class TaskController : Controller
         _context.Tareas.Remove(task);
         await _context.SaveChangesAsync();
        
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Home));
     }
 }
 

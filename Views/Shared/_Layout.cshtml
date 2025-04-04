@@ -6,13 +6,12 @@
     <title>@ViewData["Title"] - MyTareas</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ASPNETMVCTareas.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ASPNETMVCTareas</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Home">App Tareas</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,49 +19,80 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Home">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            @RenderBody()   <!-- Aquí se cargará el contenido de cada vista -->
         </main>
     </div>
+    <!--
     <h1>Pets List</h1>
     <h2>
-        <button id="downloadPdfButton">Generar PDF - actual page</button> <!-- generate visible rows -->
-        <button id="downloadFullPdfButton">Generar PDF - all records</button> <!-- Nuevo botón para generar el PDF con todas las filas -->
-        <button id="downloadExcelButton">Generar Excel</button> <!-- Botón para generar el Excel -->
+        <button id="downloadPdfButton">Generar PDF - actual page</button> 
+        <button id="downloadFullPdfButton">Generar PDF - all records</button> 
+        <button id="downloadExcelButton">Generar Excel</button>
         <input type="number" id="numPetsToAdd" min="1" max="5" value="1">
         <button id="addMoreButton">More Pets (insert)</button>
-    </h2>
-    <table id="petsTable" border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Birth Date</th>
-                <th>Age</th>
-                <th>Breed</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data will be injected here -->
-        </tbody>
-    </table>
+    </h2>-->
+    <div class="container my-4">
+        <h2 class="mb-4">Lista de Tareas</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="background-color: #e3f2fd;">Id</th>
+                        <th style="background-color: #e3f2fd;">Name</th>
+                        <th style="background-color: #e3f2fd;">Description</th>
+                        <th style="background-color: #e3f2fd;">Date</th>
+                        <th style="background-color: #e3f2fd;">¿Complete?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tarea in Model)
+                    {
+                        <tr>
+                            <td>@tarea.Id</td>
+                            <td>@tarea.Nombre</td>
+                            <td>@tarea.Descripcion</td>
+                            <td>@tarea.FechaVencimiento.ToString("yyyy/MM/dd")</td>
+                            <td>@(tarea.EstaCompleta ? "Sí" : "No")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+    </div>
+    
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Tareas - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
