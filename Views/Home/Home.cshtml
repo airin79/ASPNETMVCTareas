@@ -1,4 +1,5 @@
 ﻿@using Tareas
+@model List<Tareas.Model.Tarea>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,4 +7,48 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<p>Home page.</p>
+<p>Welcome to the Tareas Home page.</p>
+<div class="container my-4">
+    <h2 class="mb-4">Tareas</h2>
+    <a class="btn btn-primary mb-3" asp-action="Create">New Tarea</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="background-color: #e3f2fd;">Id</th>
+                <th style="background-color: #e3f2fd;">Name</th>
+                <th style="background-color: #e3f2fd;">Description</th>
+                <th style="background-color: #e3f2fd;">Date</th>
+                <th style="background-color: #e3f2fd;">Complete?</th>
+                <th style="background-color: #e3f2fd; width: 80px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tarea in Model)
+            {
+                <tr>
+                    <td>@tarea.Id</td>
+                    <td>@tarea.Name</td>
+                    <td>@tarea.Descripcion</td>
+                    <td>@tarea.Date.ToString("yyyy/MM/dd")</td>
+                    <td>@(tarea.Done ? "Sí" : "No")</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Home", new { id = tarea.Id })" class="btn btn-primary btn-sm" style="width: 100%;">
+                            <i class="fas fa-pencil-alt"></i> <!-- Ícono de FontAwesome para modificar -->
+                        </a>
+                        <!-- Delete link -->
+                        <form method="post" action="@Url.Action("Delete", "Home", new { id = tarea.Id })" onsubmit="return confirm('App Tareas dice: ¿Estás seguro de que quieres eliminar esta tarea?');" style="display: inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; margin-bottom: 5px;">
+                                <i class="fas fa-trash"></i> <!-- Ícono de FontAwesome para el bote de basura -->
+                            </button>
+                        </form>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

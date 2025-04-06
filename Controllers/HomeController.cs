@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tareas.Data;
+using Tareas.Model;
 
 namespace Tareas.Controllers
 {
@@ -8,7 +9,7 @@ namespace Tareas.Controllers
     {
         public async Task<IActionResult> Home()
         {
-            var tareas = await _context.Tarea.ToListAsync();
+            var tareas = await _context.Tareas.ToListAsync();
             return View(tareas);
         }
 
@@ -21,17 +22,46 @@ namespace Tareas.Controllers
             return View(); // buscará la vista en /Views/Home/About.cshtml
         }
 
-        private readonly TareasDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(TareasDbContext context)
+        public HomeController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IActionResult> ListaTareas()
+        [HttpGet]
+        public IActionResult Create()
         {
-            var tareas = await _context.Tarea.ToListAsync();
-            return View(tareas); // esto buscará /Views/Home/ListaTareas.cshtml
+            return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Tarea tarea)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Tareas.Add(tarea);         
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Home));   // open Home view
+            }
+            return View(tarea);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var tarea = await _context.Tareas.FindAsync(id);
+            if (tarea == null)
+            {
+                return NotFound();
+            }
+
+            _context.Tareas.Remove(tarea);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Home)); // Redirige de vuelta a la lista de tareas
+        }
+
     }
 }

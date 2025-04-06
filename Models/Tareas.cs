@@ -4,25 +4,23 @@ namespace Tareas.Model
 {
     public class Tarea
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
-        public DateTime FechaVencimiento { get; set; }
-        public bool EstaCompleta { get; set; }
+            // Error message constant
+            public const string RequiredFieldError = "Mandatory field";
 
+            [Key]
+            public int Id { get; set; }
 
-        /*
-        [Required(ErrorMessage = "El nombre es obligatorio")]
-        [StringLength(100, ErrorMessage = "Máximo 100 caracteres")]
-        public string Name { get; set; }
+            [Required(ErrorMessage = RequiredFieldError)]
+            [StringLength(100)]
+            public string Name { get; set; }
 
-        [StringLength(500, ErrorMessage = "Máximo 500 caracteres")]
-        public string? Description { get; set; }
+            [StringLength(500)]
+            public string Descripcion { get; set; }
 
-        [Required(ErrorMessage = "La fecha de vencimiento es obligatoria")]
-        public DateTime DueDate { get; set; }
+            [Required(ErrorMessage = RequiredFieldError)]
+            public DateTime Date { get; set; }
 
-        public Guid Id { get; set; }
-        */
+            public bool Done { get; set; }
+
     }
 }

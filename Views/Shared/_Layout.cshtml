@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - MyTareas</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -38,41 +39,7 @@
             @RenderBody()   <!-- Aquí se cargará el contenido de cada vista -->
         </main>
     </div>
-    <!--
-    <h1>Pets List</h1>
-    <h2>
-        <button id="downloadPdfButton">Generar PDF - actual page</button> 
-        <button id="downloadFullPdfButton">Generar PDF - all records</button> 
-        <button id="downloadExcelButton">Generar Excel</button>
-        <input type="number" id="numPetsToAdd" min="1" max="5" value="1">
-        <button id="addMoreButton">More Pets (insert)</button>
-    </h2>-->
-    <div class="container my-4">
-        <h2 class="mb-4">Lista de Tareas</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th style="background-color: #e3f2fd;">Id</th>
-                        <th style="background-color: #e3f2fd;">Name</th>
-                        <th style="background-color: #e3f2fd;">Description</th>
-                        <th style="background-color: #e3f2fd;">Date</th>
-                        <th style="background-color: #e3f2fd;">¿Complete?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var tarea in Model)
-                    {
-                        <tr>
-                            <td>@tarea.Id</td>
-                            <td>@tarea.Nombre</td>
-                            <td>@tarea.Descripcion</td>
-                            <td>@tarea.FechaVencimiento.ToString("yyyy/MM/dd")</td>
-                            <td>@(tarea.EstaCompleta ? "Sí" : "No")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-    </div>
+    
     
 
     <footer class="border-top footer text-muted">
