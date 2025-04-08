@@ -5,6 +5,7 @@ using DinkToPdf.Contracts;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Runtime.Loader;
+using Tareas.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 }*/
 
 builder.Services.AddSingleton(wkHtmlToPdfPath); // Registra la ruta de wkhtmltopdf
+builder.Services.AddTransient<IEmailService, EmailService>();   // Send email service
 
 
 builder.Services.AddCors(options =>

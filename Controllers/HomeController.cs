@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Tareas.Data;
 using Tareas.Model;
+using Tareas.Services;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 
@@ -9,10 +10,13 @@ namespace Tareas.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController(ApplicationDbContext context, IConverter converter)
+        private readonly IEmailService _emailService;
+
+        public HomeController(ApplicationDbContext context, IConverter converter, IEmailService emailService)
         {
             _context = context;
             _converter = converter; // Inyección del servicio IConverter a través del constructor
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> Home()
@@ -120,15 +124,19 @@ namespace Tareas.Controllers
         /// <param name="desde"></param>
         /// <param name="hasta"></param>
         /// <returns></returns>
-        public IActionResult GeneratePdf(string done = "all", DateTime? desde = null, DateTime? hasta = null)
+        public async Task<IActionResult> GeneratePdf(string done = "all", DateTime? desde = null, DateTime? hasta = null, string recipientEmail = "")
         {
-            //var tareas = _context.Tareas.ToList();    // All records
-            var tareas = _context.Tareas.AsQueryable();  // Tareas base
+            // If recipientEmail is not provided, use a default one
+            if (string.IsNullOrEmpty(recipientEmail))
+            {
+                recipientEmail = "airin79@gmail.com"; // Replace with a default email or handle this case
+            }
 
-            // Imprimir valor de 'done' para verificar si se recibe correctamente
-            //Console.WriteLine($"Received done parameter: {done}");
+            // Get the base query for tasks
+            var tareas = _context.Tareas.AsQueryable();
 
-            switch (done?.ToLower())    // Filtro por done
+            // Apply filters based on the 'done' parameter
+            switch (done?.ToLower())
             {
                 case "done":
                     tareas = tareas.Where(t => t.Done == true);
@@ -136,10 +144,9 @@ namespace Tareas.Controllers
                 case "undone":
                     tareas = tareas.Where(t => t.Done == false);
                     break;
-                    // "all" no filtra nada
             }
 
-            // Date filter
+            // Apply date filters if provided
             if (desde.HasValue)
             {
                 tareas = tareas.Where(t => t.Date >= desde.Value);
@@ -150,8 +157,10 @@ namespace Tareas.Controllers
                 tareas = tareas.Where(t => t.Date <= hasta.Value);
             }
 
+            // Get the filtered list of tasks
             var listaFiltrada = tareas.ToList();
 
+            // Build the HTML content for the PDF
             var htmlContent = "<html><head><style>" +
                               "table { width: 100%; border-collapse: collapse; }" +
                               "th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }" +
@@ -167,25 +176,50 @@ namespace Tareas.Controllers
             }
 
             htmlContent += "</tbody></table>" +
-                $"<div class='footer' style='text-align:justify; text-align-last:center;'>{DateTime.Now.ToString("dddd, dd MMMM yyyy")}</div>" +
-                "</body></html>";
+                           $"<div class='footer' style='text-align:justify; text-align-last:center;'>{DateTime.Now.ToString("dddd, dd MMMM yyyy")}</div>" +
+                           "</body></html>";
 
+            // Create the PDF document
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                 ColorMode = ColorMode.Color,
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4
-                },
-
+            },
                 Objects = { new ObjectSettings() {
                 HtmlContent = htmlContent }}
-
             };
 
+            // Convert HTML to PDF
             var pdf = _converter.Convert(doc);
+
+            // Prepare the email details
+            var emailSubject = "Tareas PDF";
+            var emailBody = "Please find attached the PDF with the list of tasks.";
+
+            // Email sending logic with try-catch
+            try
+            {
+                //var recipientEmail = "airin79@gmail.com";
+                await _emailService.SendEmailAsync(recipientEmail, emailSubject, emailBody, pdf, "tareas.pdf");
+            }
+            catch (Exception ex)
+            {
+                // Log the error (or handle it based on your needs)
+                Console.WriteLine($"Error sending email: {ex.Message}");
+
+                // Modify the email body to notify about the failure
+                emailBody += "<br><br><strong>Note:</strong> There was an issue sending the email with the attachment. The email was not sent, but you can still download the PDF.";
+
+                // Send a notification email about the failure (optional)
+                // Optionally send a notification to the admin or log it
+            }
+
+            // Return the generated PDF to the user
             return File(pdf, "application/pdf", "tareas.pdf");
         }
+
 
         public IActionResult MarkAsDone(int id)
         {
