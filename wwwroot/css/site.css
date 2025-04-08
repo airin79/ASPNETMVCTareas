@@ -50,6 +50,7 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+
 }
 
     /* Efecto hover */
@@ -66,6 +67,11 @@ button {
         transform: none;
         box-shadow: none;
     }
+
+    .btn-outline-primary.white-bg {
+        background-color: white !important;
+    }
+
 
 /* Contenedor de los botones de paginación */
 #pagination-container {
