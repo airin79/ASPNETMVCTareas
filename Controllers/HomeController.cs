@@ -14,12 +14,16 @@ namespace Tareas.Controllers
     public class HomeController : Controller
     {
         private readonly IEmailService _emailService;
+        private readonly PdfService _pdfService;
+        private readonly AzureStorageService _azureStorageService;
 
-        public HomeController(ApplicationDbContext context, IConverter converter, IEmailService emailService)
+        public HomeController(ApplicationDbContext context, IConverter converter, IEmailService emailService, PdfService pdfService, AzureStorageService azureStorageService)
         {
             _context = context;
             _converter = converter; // Inyección del servicio IConverter a través del constructor
             _emailService = emailService;
+            _pdfService = pdfService;
+            _azureStorageService = azureStorageService;
         }
 
         public async Task<IActionResult> Home()
@@ -223,6 +227,20 @@ namespace Tareas.Controllers
             return File(pdf, "application/pdf", "tareas.pdf");
         }
 
+        public async Task<IActionResult> GenerateAndUploadPdf()
+        {
+            // Esto debería generarse dinámicamente a partir de tu tabla, aquí es un ejemplo estático:
+            string html = "<h2>My PDF Table</h2><table border='1'><tr><td>Item</td><td>Value</td></tr><tr><td>Example</td><td>123</td></tr></table>";
+
+            byte[] pdfBytes = _pdfService.GeneratePdfFromHtml(html);
+
+            string fileName = $"report_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+
+            string resultMessage = await _azureStorageService.UploadPdfAsync(fileName, pdfBytes);
+
+            TempData["AzureUploadResult"] = resultMessage;
+            return RedirectToAction("Home");
+        }
 
         public IActionResult MarkAsDone(int id)
         {

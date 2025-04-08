@@ -101,11 +101,20 @@
     <form method="post" action="@Url.Action("TestConnection", "Azure")">
         <button type="submit" class="btn btn-primary">Test Azure Connection</button>
     </form>
+    <a class="btn btn-primary" asp-controller="Home" asp-action="GenerateAndUploadPdf">📤 Generate and Upload PDF</a>
+
     <!-- Display the result message if available -->
     @if (TempData["TestResult"] != null)
     {
         <div class="alert alert-info">
             @TempData["TestResult"]
+        </div>
+    }
+
+    @if (TempData["AzureUploadResult"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["AzureUploadResult"]
         </div>
     }
 

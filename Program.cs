@@ -50,7 +50,7 @@ builder.Services.AddSingleton(wkHtmlToPdfPath); // Registra la ruta de wkhtmltop
 builder.Services.AddTransient<IEmailService, EmailService>();   // Send email service
 
 builder.Services.AddSingleton<AzureStorageService>();
-
+builder.Services.AddTransient<PdfService>();    
 
 builder.Services.AddCors(options =>
 {

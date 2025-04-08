@@ -13,13 +13,6 @@ async function generatePdf() {
         recipientEmail: recipientEmail  // Add recipient email as a parameter
     });
 
-    /*
-    const params = new URLSearchParams({
-    done: document.getElementById("done").value,
-    desde: document.getElementById("desde").value,
-    hasta: document.getElementById("hasta").value
-    });*/
-
     const url = "/Home/GeneratePdf?" + params.toString();
     console.log("Generated URL:", url);
 
