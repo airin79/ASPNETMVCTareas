@@ -64,16 +64,28 @@
                     <td>@tarea.Date.ToString("yyyy/MM/dd")</td>
                     <td>
                         <input type="checkbox" disabled @(tarea.Done ? "checked" : "") />
+                        <!-- Button to mark task as completed -->
+                        @if (!tarea.Done) // Only show the button if the task is not completed
+                        {
+                            <a href="@Url.Action("MarkAsDone", "Home", new { id = tarea.Id })" class="btn btn-sm btn-outline-success" title="Mark as Done">
+                                <i class="bi bi-check-circle"></i>Done
+                            </a>
+                        }
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@tarea.Id" class="btn btn-sm btn-outline-primary me-2" title="Modify">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                        <form method="post" action="@Url.Action("Delete", "Home", new { id = tarea.Id })" style="display:inline;" onsubmit="return confirm('¿Sure?');">
-                            <button type="submit" class="btn btn-sm btn-outline-primary white-bg" title="Delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </form>
+                        <div class="btn-container">
+                            <!-- Modify Button -->
+                            <a asp-action="Edit" asp-route-id="@tarea.Id" class="btn btn-sm btn-outline-primary modify-btn" title="Modify">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form method="post" action="@Url.Action("Delete", "Home", new { id = tarea.Id })" style="display:inline;" onsubmit="return confirm('¿Sure?');">
+                                @Html.AntiForgeryToken() <!-- This ensures anti-forgery protection -->
+                                <button type="submit" class="btn btn-sm btn-outline-primary white-bg" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             }

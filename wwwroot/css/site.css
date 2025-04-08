@@ -38,6 +38,52 @@ th {
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+/* Container for buttons (Modify and Delete) */
+.btn-container {
+    display: flex; /* Use flexbox */
+    gap: 5px; /* Space between the buttons */
+    justify-content: start; /* Align buttons to the left side */
+    align-items: center; /* Vertically center the buttons */
+}
+
+/* Ensure both buttons have consistent size and padding */
+.btn-outline-primary {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Modify button style */
+.btn-outline-primary.modify-btn {
+    color: #007bff;
+    background-color: white;
+    border: 1px solid #007bff;
+}
+
+.btn-outline-primary.modify-btn:hover {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Delete button style */
+.btn-outline-primary.delete-btn {
+    color: #dc3545;
+    background-color: white;
+    border: 1px solid #dc3545;
+}
+
+.btn-outline-primary.delete-btn:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: scale(1.05);
+}
+
+
 /* Estilos generales para todos los botones */
 button {
     background: linear-gradient(135deg, #007bff, #0056b3); /* Degradado azul */
@@ -53,25 +99,20 @@ button {
 
 }
 
-    /* Efecto hover */
-    button:hover {
-        background: linear-gradient(135deg, #0056b3, #003d82);
-        transform: scale(1.05);
-    }
+/* Efecto hover */
+button:hover {
+    background: linear-gradient(135deg, #0056b3, #003d82);
+    transform: scale(1.05);
+}
 
-    /* Estilo de los botones cuando están deshabilitados */
-    button:disabled {
-        background: #ccc;
-        color: #666;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
-
-    .btn-outline-primary.white-bg {
-        background-color: white !important;
-    }
-
+/* Estilo de los botones cuando están deshabilitados */
+button:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
 
 /* Contenedor de los botones de paginación */
 #pagination-container {
@@ -89,13 +130,6 @@ button {
     color: #333;
 }
 
-#numPetsToAdd {
-    display: inline-block; /* Asegura que el input esté visible */
-    visibility: visible; /* Asegura que no esté oculto */
-    width: 30px; /* Ajusta el tamaño */
-    padding: 5px;
-    font-size: 16px;
-}
 /* Estilos para la etiqueta similar al botón */
 label {
     display: inline-block;
@@ -110,17 +144,17 @@ label {
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-    /* Efecto hover */
-    label:hover {
-        background: linear-gradient(135deg, #0056b3, #003d82);
-        transform: scale(1.05);
-    }
+/* Efecto hover */
+label:hover {
+    background: linear-gradient(135deg, #0056b3, #003d82);
+    transform: scale(1.05);
+}
 
-    /* Estilo de la etiqueta cuando está deshabilitada */
-    label:disabled {
-        background: #ccc;
-        color: #666;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
+/* Estilo de la etiqueta cuando está deshabilitada */
+label:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

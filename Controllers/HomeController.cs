@@ -55,6 +55,8 @@ namespace Tareas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
+            //Console.WriteLine($"Deleting task with ID: {id}");
+
             var tarea = await _context.Tareas.FindAsync(id);
             if (tarea == null)
             {
@@ -63,7 +65,7 @@ namespace Tareas.Controllers
 
             _context.Tareas.Remove(tarea);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Home)); // Redirige de vuelta a la lista de tareas
+            return RedirectToAction("Home"); // Redirect to the Home page
         }
 
         [HttpGet]
@@ -195,7 +197,7 @@ namespace Tareas.Controllers
                 _context.SaveChanges(); // Save the changes to the database
             }
 
-            return RedirectToAction("Index"); // Redirect to the Index page (or any other page you prefer)
+            return RedirectToAction("Home"); // Redirect to the Home page
         }
 
     }
