@@ -97,6 +97,18 @@
             }
         </tbody>
     </table>
+    <!-- Button to test Azure connection -->
+    <form method="post" action="@Url.Action("TestConnection", "Azure")">
+        <button type="submit" class="btn btn-primary">Test Azure Connection</button>
+    </form>
+    <!-- Display the result message if available -->
+    @if (TempData["TestResult"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["TestResult"]
+        </div>
+    }
+
 </div>
 
 

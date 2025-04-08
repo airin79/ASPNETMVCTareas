@@ -5,6 +5,9 @@ using Tareas.Model;
 using Tareas.Services;
 using DinkToPdf;
 using DinkToPdf.Contracts;
+using Azure.Storage.Blobs;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Tareas.Controllers
 {
@@ -235,4 +238,7 @@ namespace Tareas.Controllers
         }
 
     }
+
+
+    
 }

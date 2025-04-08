@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Runtime.Loader;
 using Tareas.Services;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +23,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure Azure Blob Storage connection
-/*builder.Services.AddSingleton(x =>
+builder.Services.AddSingleton(x =>
     new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString"))
-);*/
+);
 
 // Configurar DinkToPdf (usando SynchronizedConverter y PdfTools)
 builder.Services.AddSingleton<IConverter, SynchronizedConverter>(sp =>
@@ -47,6 +48,8 @@ else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 
 builder.Services.AddSingleton(wkHtmlToPdfPath); // Registra la ruta de wkhtmltopdf
 builder.Services.AddTransient<IEmailService, EmailService>();   // Send email service
+
+builder.Services.AddSingleton<AzureStorageService>();
 
 
 builder.Services.AddCors(options =>
@@ -73,9 +76,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-
-
 
 // Configuración de rutas
 app.UseRouting();
@@ -106,4 +106,5 @@ public class CustomAssemblyLoadContext : AssemblyLoadContext
         return null;
     }
 }
+
 
