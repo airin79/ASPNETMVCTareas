@@ -121,12 +121,10 @@ namespace Tareas.Controllers
         public IActionResult GeneratePdf(string done = "all", DateTime? desde = null, DateTime? hasta = null)
         {
             //var tareas = _context.Tareas.ToList();    // All records
-
-            // Tareas base
-            var tareas = _context.Tareas.AsQueryable();
+            var tareas = _context.Tareas.AsQueryable();  // Tareas base
 
             // Imprimir valor de 'done' para verificar si se recibe correctamente
-            Console.WriteLine($"Received done parameter: {done}");
+            //Console.WriteLine($"Received done parameter: {done}");
 
             switch (done?.ToLower())    // Filtro por done
             {
@@ -167,8 +165,8 @@ namespace Tareas.Controllers
             }
 
             htmlContent += "</tbody></table>" +
-               $"<div class='footer' style='text-align:justify; text-align-last:center;'>{DateTime.Now.ToString("dddd, dd MMMM yyyy")}</div>" +
-               "</body></html>";
+                $"<div class='footer' style='text-align:justify; text-align-last:center;'>{DateTime.Now.ToString("dddd, dd MMMM yyyy")}</div>" +
+                "</body></html>";
 
             var doc = new HtmlToPdfDocument()
             {
@@ -176,14 +174,28 @@ namespace Tareas.Controllers
                 ColorMode = ColorMode.Color,
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4
-            },
+                },
+
                 Objects = { new ObjectSettings() {
                 HtmlContent = htmlContent }}
 
-        };
+            };
 
-        var pdf = _converter.Convert(doc);
-        return File(pdf, "application/pdf", "tareas.pdf");
+            var pdf = _converter.Convert(doc);
+            return File(pdf, "application/pdf", "tareas.pdf");
+        }
+
+        public IActionResult MarkAsDone(int id)
+        {
+            var tarea = _context.Tareas.FirstOrDefault(t => t.Id == id);
+
+            if (tarea != null)
+            {
+                tarea.Done = true; // Mark the task as completed
+                _context.SaveChanges(); // Save the changes to the database
+            }
+
+            return RedirectToAction("Index"); // Redirect to the Index page (or any other page you prefer)
         }
 
     }
